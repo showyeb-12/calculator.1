@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        /* CSS Section */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #cbd5e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .calculator {
+            background-color: #3d454a;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0px 20px 40px rgba(0,0,0,0.4);
+            width: 320px;
+            border: 2px solid #2d3436;
+        }
+
+        .brand {
+            color: #bdc3c7;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            background-color: white;
+        }
+
+        .brand span {
+            font-style: italic;
+            color: #ecf0f1;
+        }
+
+        #display {
+            width: 100%;
+            height: 70px;
+            background-color: #9ead86; /* Casio LCD Greenish Tint */
+            border: 4px solid #1a1a1a;
+            border-radius: 5px;
+            font-size: 32px;
+            text-align: right;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            color: #1a1a1a;
+            font-weight: bold;
+            outline: none;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0px 4px #1a1a1a;
+        }
+
+        button:active {
+            box-shadow: 0px 0px;
+            transform: translateY(4px);
+        }
+
+        /* Color Coding */
+        .number { background-color: #ecf0f1; color: #2c3e50; }
+        .operator { background-color: #444; color: white; }
+        .clear { background-color: #c0392b; color: white; font-size: 14px; }
+        .del { background-color: #d35400; color: white; font-size: 14px; }
+        .equal { 
+            background-color: #2c3e50; 
+            color: white; 
+            grid-column: span 1;
+        }
+
+        .zero { grid-column: span 1; }
+
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <div class="brand">CASIO <span>fx-991MS</span></div>
+        <input type="text" id="display" readonly placeholder="0">
+        
+        <div class="buttons">
+            <!-- Row 1 -->
+            <button class="clear" onclick="clearDisplay()">AC</button>
+            <button class="del" onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            <button class="operator" onclick="appendToDisplay('*')">×</button>
+            
+            <!-- Row 2 -->
+            <button class="number" onclick="appendToDisplay('7')">7</button>
+            <button class="number" onclick="appendToDisplay('8')">8</button>
+            <button class="number" onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('-')">−</button>
+            
+            <!-- Row 3 -->
+            <button class="number" onclick="appendToDisplay('4')">4</button>
+            <button class="number" onclick="appendToDisplay('5')">5</button>
+            <button class="number" onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            
+            <!-- Row 4 -->
+            <button class="number" onclick="appendToDisplay('1')">1</button>
+            <button class="number" onclick="appendToDisplay('2')">2</button>
+            <button class="number" onclick="appendToDisplay('3')">3</button>
+            <button class="equal" onclick="calculate()">=</button>
+            
+            <!-- Row 5 -->
+            <button class="number zero" onclick="appendToDisplay('0')">0</button>
+            <button class="number" onclick="appendToDisplay('.')">.</button>
+            <button class="operator" onclick="appendToDisplay('%')">%</button>
+            <button class="operator" onclick="calculateExp()">^</button>
+        </div>
+    </div>
+
+    <script>
+        /* JS Section */
+        const display = document.getElementById('display');
+
+        function appendToDisplay(input) {
+            if (display.value === "Error") clearDisplay();
+            display.value += input;
+        }
+
+        function clearDisplay() {
+            display.value = "";
+        }
+
+        function deleteLast() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function calculate() {
+            try {
+                // Replacing symbols for calculation
+                let expression = display.value.replace('×', '*').replace('÷', '/');
+                display.value = eval(expression);
+            } catch (error) {
+                display.value = "Error";
+                setTimeout(clearDisplay, 1500);
+            }
+        }
+
+        // Bonus: Power functionality
+        function calculateExp() {
+            display.value += "**";
+        }
+    </script>
+</body>
+</html>
